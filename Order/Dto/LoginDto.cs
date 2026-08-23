@@ -9,5 +9,6 @@ namespace Order.DTOs
 
         [Required]
         public string Password { get; set; }
+        public string Email { get; internal set; }
     }
 }

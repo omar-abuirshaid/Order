@@ -1,8 +1,10 @@
 ﻿using Order.DTOs;
+using Order.DTOs;
 using Order.Enums;
+using Order.Mappings;
 using Order.Model;
 
-namespace Order.Mappings
+namespace Order.Mapper
 {
     public class OrderMapper
     {
@@ -27,7 +29,7 @@ namespace Order.Mappings
             return new OrderResponseDto
             {
                 Id = entity.Id,
-                CustomerId = entity.CustomerId,
+                CustomerId = entity.CustomerId ?? 0, // استخدام قيمة افتراضية لتفادي خطأ Nullable int
                 OrderDate = entity.OrderDate,
                 TotalAmount = entity.TotalAmount,
                 Status = entity.Status,

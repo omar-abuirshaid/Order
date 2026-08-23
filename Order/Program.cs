@@ -16,16 +16,28 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
+// 2. إعداد الـ CORS للتوافق مع الـ Front-end
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
-// 2. إعداد Swagger بدون التعقيدات والمكاتب اللي بتعمل مشاكل
+// 3. إعداد Swagger الأصلي تبعك
 builder.Services.AddSwaggerGen();
 
-// 3. ربط الـ DbContext
+// 4. ربط الـ DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 4. إعداد ASP.NET Core Identity
+// 5. إعداد ASP.NET Core Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -35,7 +47,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// 5. إعداد JWT Authentication
+// 6. إعداد JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,12 +71,12 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// 6. تسجيل خدمة الـ TokenService
+// 7. تسجيل خدمة الـ TokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
-// 7. تفعيل Swagger
+// 8. تفعيل Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -77,7 +89,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 8. تفعيل الـ Authentication والـ Authorization بالترتيب
+// 9. تفعيل CORS للفرونت
+app.UseCors("AllowReactApp");
+
+// 10. تفعيل الـ Authentication والـ Authorization بالترتيب
 app.UseAuthentication();
 app.UseAuthorization();
 
