@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Order.DTOs
 {
@@ -9,6 +9,6 @@ namespace Order.DTOs
 
         [Required]
         public string Password { get; set; }
-        public string Email { get; internal set; }
+        public string Email { get; set; }
     }
 }

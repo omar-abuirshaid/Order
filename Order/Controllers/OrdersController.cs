@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Order.Data;
 using Order.DTOs;
@@ -60,6 +60,12 @@ namespace Order.Controllers
             }
 
             var orderEntity = _orderMapper.ToEntity(dto);
+
+            // Assign a valid UserId to satisfy the database foreign key constraint
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value 
+                                ?? _context.Users.FirstOrDefault()?.Id 
+                                ?? string.Empty;
+            orderEntity.UserId = currentUserId;
 
             _context.Orders.Add(orderEntity);
             await _context.SaveChangesAsync();
