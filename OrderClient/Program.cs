@@ -1,6 +1,4 @@
-using System;
 using System.Diagnostics;
-using System.IO;
 
 namespace OrderClient
 {
@@ -19,12 +17,12 @@ namespace OrderClient
             // Locate solution directory
             string baseDir = AppContext.BaseDirectory;
             string solutionDir = "";
-            
+
             // Move up to find the folder containing both Order and OrderClient
             var dir = new DirectoryInfo(baseDir);
             while (dir != null)
             {
-                if (Directory.Exists(Path.Combine(dir.FullName, "Order")) && 
+                if (Directory.Exists(Path.Combine(dir.FullName, "Order")) &&
                     Directory.Exists(Path.Combine(dir.FullName, "OrderClient")))
                 {
                     solutionDir = dir.FullName;
@@ -52,7 +50,7 @@ namespace OrderClient
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("1. Spawning Backend API (ASP.NET Core)...");
             Console.ResetColor();
-            
+
             try
             {
                 var backendStartInfo = new ProcessStartInfo
@@ -78,7 +76,7 @@ namespace OrderClient
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("2. Spawning Frontend Dev Server (Vite)...");
             Console.ResetColor();
-            
+
             try
             {
                 var frontendStartInfo = new ProcessStartInfo
